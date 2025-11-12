@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             countryList.forEach(country => {
                 const option = document.createElement('option');
                 option.value = country.name; 
-                option.textContent = country.name_ar; 
+                option.textContent = country.name; 
                 countrySelect.appendChild(option);
             });
         } else {
@@ -208,3 +208,4 @@ if (typeof window.loadOnboardingData !== 'function') {
         }
     };
 }
+
