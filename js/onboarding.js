@@ -136,7 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
                  updateData.referredBy = enteredReferralCode;
             }
 
-            await db.collection('users').doc(currentUser.uid).update(updateData);
+            // نستخدم set مع merge: true لضمان إنشاء المستند إذا لم يكن موجوداً
+			await db.collection('users').doc(currentUser.uid).set(updateData, { merge: true });
 
             // 6. التوجيه النهائي
             window.location.href = 'dashboard.html';
