@@ -263,6 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'Transfer_Sent',
                     currency: 'USD',
                     amount: -amount,
+					status: 'completed',
                     recipient: recipientUsername,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
@@ -272,6 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'Transfer_Received',
                     currency: 'USD',
                     amount: amount,
+					status: 'completed',
                     sender: currentUserData.username,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
