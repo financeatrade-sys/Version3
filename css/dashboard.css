@@ -353,3 +353,45 @@
    /* =================================================================
    Form Elements Styling (Used in Wallet, Profile, etc.) end...
    ================================================================= */
+   
+   
+   /* 1. تنسيق الحاويات لجعل الإدخال والزر متجاورين */
+.code-container,
+.link-container {
+    display: flex; /* لترتيب العناصر جنبًا إلى جنب */
+    align-items: center; /* لمحاذاة العناصر عموديًا */
+    margin-bottom: 25px; /* مسافة فاصلة بين الكود والرابط */
+    max-width: 600px; /* تحديد عرض أقصى لعدم تمدد العناصر بشكل مبالغ فيه */
+}
+
+/* 2. تنسيق حقول الإدخال (الكود والرابط) */
+#referral-code-display,
+#share-link-display {
+    flex-grow: 1; /* للسماح للحقل بأخذ أكبر مساحة ممكنة */
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px 0 0 6px; /* جعل الحافة اليسرى مستديرة */
+    background-color: #f8f8f8; /* خلفية فاتحة للقراءة فقط */
+    font-size: 1em;
+    color: #333;
+    /* إزالة التظليل عند التركيز (Focus) */
+    outline: none; 
+    box-shadow: none; 
+}
+
+/* 3. تنسيق أزرار النسخ */
+.copy-btn {
+    padding: 10px 15px;
+    background-color: #007bff; /* لون أساسي بارز */
+    color: white;
+    border: 1px solid #007bff;
+    border-left: none; /* إزالة الحد الأيسر ليلتصق بحقل الإدخال */
+    border-radius: 0 6px 6px 0; /* جعل الحافة اليمنى مستديرة */
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s;
+}
+
+.copy-btn:hover {
+    background-color: #0056b3;
+}
