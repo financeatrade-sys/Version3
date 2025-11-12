@@ -354,44 +354,53 @@
    Form Elements Styling (Used in Wallet, Profile, etc.) end...
    ================================================================= */
    
-   
-   /* 1. تنسيق الحاويات لجعل الإدخال والزر متجاورين */
-.code-container,
-.link-container {
-    display: flex; /* لترتيب العناصر جنبًا إلى جنب */
-    align-items: center; /* لمحاذاة العناصر عموديًا */
-    margin-bottom: 25px; /* مسافة فاصلة بين الكود والرابط */
-    max-width: 600px; /* تحديد عرض أقصى لعدم تمدد العناصر بشكل مبالغ فيه */
+   /* 1. تنسيق المجموعة التي تحتوي على الحقل والزر */
+/* هذه الفئة موجودة في الكود الخاص بك: <div class="form-group referral-info-group"> */
+.referral-info-group {
+    display: flex; /* لترتيب حقل الإدخال والزر جنباً إلى جنب */
+    align-items: stretch; /* لضمان تساوي ارتفاع الحقل والزر */
+    margin-bottom: 25px;
+    max-width: 600px; /* لتقييد عرض قسم الإحالة */
+    border: 1px solid #444; /* لإعطاء مظهر متكامل للمجموعة */
+    border-radius: 6px;
+    overflow: hidden; /* لمنع ظهور أي حدود متبقية بشكل غير صحيح */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 2. تنسيق حقول الإدخال (الكود والرابط) */
+/* 2. تنسيق حقول الإدخال للقراءة فقط */
 #referral-code-display,
-#share-link-display {
-    flex-grow: 1; /* للسماح للحقل بأخذ أكبر مساحة ممكنة */
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px 0 0 6px; /* جعل الحافة اليسرى مستديرة */
-    background-color: #f8f8f8; /* خلفية فاتحة للقراءة فقط */
+#referral-link-display {
+    flex-grow: 1; /* للسماح للحقل بأخذ كل المساحة المتاحة */
+    padding: 12px 15px;
+    border: none; /* إزالة الحد الداخلي لأنه تم تعيينه على المجموعة */
+    background-color: #3a3a3a; /* لون خلفية أغمق (مناسب للوضع الداكن) */
+    color: #f0f0f0;
     font-size: 1em;
-    color: #333;
-    /* إزالة التظليل عند التركيز (Focus) */
+    font-family: monospace; /* استخدام خط برمجي للكود/الرابط */
+    cursor: text; /* لجعله يبدو كحقل للقراءة */
     outline: none; 
-    box-shadow: none; 
 }
 
 /* 3. تنسيق أزرار النسخ */
+/* ملاحظة: الكود الخاص بك يستخدم الفئة btn-secondary، لذا سنستهدفها مع copy-btn */
 .copy-btn {
-    padding: 10px 15px;
-    background-color: #007bff; /* لون أساسي بارز */
+    /* override any default btn padding if necessary */
+    padding: 12px 15px; 
+    background-color: #007bff; /* لون بارز لزر النسخ */
     color: white;
-    border: 1px solid #007bff;
-    border-left: none; /* إزالة الحد الأيسر ليلتصق بحقل الإدخال */
-    border-radius: 0 6px 6px 0; /* جعل الحافة اليمنى مستديرة */
-    cursor: pointer;
-    font-size: 1em;
+    border: none; /* إزالة الحدود */
+    flex-shrink: 0; /* لمنع الزر من الانكماش */
     transition: background-color 0.2s;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 
 .copy-btn:hover {
     background-color: #0056b3;
+}
+
+/* 4. تنسيق أيقونة النسخ */
+.copy-btn i.fas {
+    margin-right: 5px;
 }
