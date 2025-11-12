@@ -1,101 +1,210 @@
-// =================================================================
-// js/onboarding.js - Logic for Profile Completion and Initial Bonus (FINAL)
-// يتضمن التعديلات لحقول قاعدة بياناتك
-// =================================================================
+/**
+ * js/onboarding.js - Logic for Profile Completion and Initial Bonus (FINAL)
+ * يتضمن التعديلات لحقول قاعدة بياناتك
+ * تمت إضافة حقول: fullName، createdAt، balance، points، pointsPendingPool
+ */
 
 // مكافأة البداية (تُضاف عند إكمال الملف الشخصي)
 const START_BONUS = 100;
 
-// متغير عالمي مؤقت لتخزين بيانات المستخدم الحالي
-let currentUserId = null;
-
-// دالة مساعدة لعرض الرسائل
-function displayOnboardingMessage(message, isError = false) {
-    const el = document.getElementById('onboarding-status');
-    if (el) {
-        el.textContent = message;
-        el.classList.remove('hidden', 'alert-success', 'alert-danger');
-        el.classList.add(isError ? 'alert-danger' : 'alert-success');
-    }
-}
+// متغير عالمي مؤقت لتخزين بيانات المستخدم الحالي (يتم تعيينه بواسطة app.js)
+let currentUser = null; 
 
 document.addEventListener('DOMContentLoaded', () => {
     
+    // 1. جلب العناصر الأساسية
     const onboardingForm = document.getElementById('onboarding-form');
+    // 🚨 تأكد من وجود حقل fullName في HTML
+    const fullNameInput = document.getElementById('full-name');
+    const countrySelect = document.getElementById('country');
+    const submitBtn = document.getElementById('onboarding-submit-btn');
+    const errorDisplay = document.getElementById('onboarding-error');
+    const referralInput = document.getElementById('referralCode');
+    const usernameInput = document.getElementById('username');
     
-    if (onboardingForm) {
-        onboardingForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+    if (!onboardingForm) return;
+
+    // 2. دوال مساعدة
+    function displayError(message) {
+        errorDisplay.textContent = message;
+        errorDisplay.classList.remove('hidden');
+    }
+
+    // دالة مساعدة مفترضة لجلب الدول (يجب أن يكون countryList متاحًا عالميًا)
+    function populateCountries() {
+        if (typeof countryList !== 'undefined' && countryList.length > 0) {
+             const defaultOption = document.createElement('option');
+            defaultOption.textContent = "Select Your Country";
+            defaultOption.value = "";
+            countrySelect.appendChild(defaultOption);
             
-            // 🚨 التحقق من وجود UID هنا
-            if (!currentUserId) {
-                displayOnboardingMessage("Authentication error. Please sign in again.", true);
-                window.location.href = 'auth.html'; // التوجيه لتسجيل الدخول مرة أخرى
-                return;
+            countryList.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country.name; 
+                option.textContent = country.name_ar; 
+                countrySelect.appendChild(option);
+            });
+        } else {
+            console.error("countryList is not defined or empty. Check data/countries.js.");
+        }
+    }
+
+    // 3. التحقق من اسم المستخدم في Firestore
+    async function checkUsernameAvailability(username) {
+        // إذا كان المستخدم يحاول استخدام نفس اسم المستخدم القديم، لا داعي للتحقق
+        if (currentUser && currentUser.username === username) return true;
+        
+        const snapshot = await db.collection('users').where('username', '==', username).limit(1).get();
+        // snapshot.empty تعني أن اسم المستخدم فريد
+        return snapshot.empty;
+    }
+
+    // 4. معالجة إرسال النموذج
+    onboardingForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // 🚨 يجب أن يكون currentUser هو UserCredential من Firebase
+        if (!currentUser || !currentUser.uid) {
+            displayError("Authentication error. Please sign in again.");
+            setTimeout(() => { window.location.href = 'auth.html'; }, 1000);
+            return;
+        }
+
+        submitBtn.disabled = true;
+        errorDisplay.classList.add('hidden');
+
+        const username = usernameInput.value.trim();
+        const fullName = fullNameInput.value.trim(); // 🚨 جلب الاسم الكامل
+        const countryName = countrySelect.value;
+        const enteredReferralCode = referralInput.value.trim() || null; // كود تم إدخاله يدوياً
+
+        // 4.1 التحقق من البيانات المطلوبة
+        if (username.length < 3 || fullName.length < 5 || countryName === "") {
+             displayError('Please enter a full name (min 5 chars), username (min 3 chars), and select a country.');
+             submitBtn.disabled = false;
+             return;
+        }
+
+
+        // 4.2 التحقق من توافر اسم المستخدم
+        if (!(await checkUsernameAvailability(username))) {
+            displayError("This username is already taken. Please choose another one.");
+            submitBtn.disabled = false;
+            return;
+        }
+        
+        // 4.3 إنشاء كود الإحالة الخاص بالمستخدم
+        const userReferralCode = currentUser.uid.substring(0, 8);
+
+
+        try {
+            // 5. تحديث Firestore ببيانات الملف الشخصي والمكافأة
+            
+            // تهيئة الحقول (للتأكد من أنها موجودة)
+            const updateData = {
+                // البيانات التي أدخلها المستخدم
+                username: username,
+                fullName: fullName, 
+                country: countryName,
+                
+                // حالة الاكتمال والمكافأة
+                balance: firebase.firestore.FieldValue.increment(START_BONUS), 
+                isProfileComplete: true,
+                onboardingCompleted: true,
+                
+                // حقول التهيئة الإضافية (مهمة لـ dashboard.js)
+                points: 0,
+                pointsPendingPool: 0,
+                primeLevel: 0,
+                referralCode: userReferralCode, // كود الإحالة الخاص به
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                
+                // تحديث اسم العرض الخاص بـ Firebase Auth
+                displayName: username,
+            };
+            
+            // 🚨 منطق الإحالة: إذا كان هناك كود مدخل يدوياً، يتم إضافته إلى referredBy
+            // يتم التحقق فقط إذا لم تكن القيمة مسجلة مسبقاً في قاعدة البيانات
+            const userDocCheck = await db.collection('users').doc(currentUser.uid).get();
+            if (enteredReferralCode && !userDocCheck.data().referredBy) {
+                 updateData.referredBy = enteredReferralCode;
             }
 
-            const username = document.getElementById('username').value.trim();
-            const country = document.getElementById('country').value.trim();
-            const fullName = document.getElementById('full-name').value.trim();
-            
-            const submitBtn = onboardingForm.querySelector('button[type="submit"]');
-            submitBtn.disabled = true;
-            displayOnboardingMessage("", false); 
+            await db.collection('users').doc(currentUser.uid).update(updateData);
 
-            try {
-                // 1. التحقق من توافر اسم المستخدم
-                const usernameExists = await db.collection('users').where('username', '==', username).limit(1).get();
-                if (!usernameExists.empty) {
-                     displayOnboardingMessage(`Username "${username}" is already taken.`, true);
-                     submitBtn.disabled = false;
-                     return;
-                }
-                
-                // 2. إنشاء كود الإحالة (بناءً على أول 8 أحرف من الـ UID)
-                const referralCode = currentUserId.substring(0, 8);
+            // 6. التوجيه النهائي
+            window.location.href = 'dashboard.html';
 
-                // 3. تحديث بيانات المستخدم في Firestore
-                await db.collection('users').doc(currentUserId).update({
-                    username: username,
-                    fullName: fullName,
-                    country: country,
-                    onboardingCompleted: true, // علامة اكتمال التأهيل
-                    referralCode: referralCode, // حفظ كود الإحالة
-                    // التأكد من تهيئة الأرصدة إذا لم يتم تهيئتها بعد
-                    balance: firebase.firestore.FieldValue.serverTimestamp() || 0,
-                    points: firebase.firestore.FieldValue.serverTimestamp() || 0,
-                    pointsPendingPool: firebase.firestore.FieldValue.serverTimestamp() || 0
-                });
+        } catch (error) {
+            console.error("Onboarding submission failed:", error);
+            displayError("Error saving profile: " + error.message);
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
 
-                displayOnboardingMessage('Data saved successfully! Redirecting to dashboard...', false);
-                
-                // التوجيه إلى لوحة التحكم بعد نجاح الحفظ
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
+    // 7. تهيئة الصفحة عند التحميل
+    populateCountries();
+    
+    // قراءة كود الإحالة من الرابط (إذا كان المستخدم قد جاء من رابط إحالة)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlReferralCode = urlParams.get('ref');
 
-            } catch (error) {
-                console.error("Onboarding data save failed:", error);
-                displayOnboardingMessage('Failed to save data. Try again or contact support.', true);
-            } finally {
-                submitBtn.disabled = false;
-            }
-        });
+    if (urlReferralCode && urlReferralCode !== 'null') {
+         referralInput.value = urlReferralCode;
+         referralInput.readOnly = true;
     }
 });
 
-// **************************************************
-// 🚨 الدالة الجديدة التي يستدعيها app.js 
-// **************************************************
+
+// 💥 الوظيفة التي يتم استدعاؤها من app.js بعد المصادقة
 if (typeof window.loadOnboardingData !== 'function') {
-    window.loadOnboardingData = (user) => {
-        if (user && user.uid) {
-            currentUserId = user.uid; // حفظ الـ UID لاستخدامه عند الضغط على Save
-            console.log("Onboarding loaded for UID:", user.uid);
-            // قد ترغب هنا في ملء حقول مثل الإيميل إذا لزم الأمر
-        } else {
-            // توجيه المستخدم إذا لم يكن هناك بيانات
-            window.location.href = 'auth.html';
+    window.loadOnboardingData = async (user) => {
+        currentUser = user; 
+        
+        // 1. التحقق من أن المستخدم يجب أن يكون هنا
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        const data = userDoc.exists ? userDoc.data() : {};
+
+        if (data.onboardingCompleted) {
+            window.location.href = 'dashboard.html';
+            return;
+        }
+        
+        // 2. ملء الحقول المتاحة
+        const usernameInput = document.getElementById('username');
+        const fullNameInput = document.getElementById('full-name');
+        
+        // ملء اسم المستخدم إذا كان متاحاً في قاعدة البيانات
+        if (data.username && usernameInput) {
+            usernameInput.value = data.username;
+        }
+        
+        // ملء الاسم الكامل من Google Auth أو من قاعدة البيانات
+        if (fullNameInput) {
+            fullNameInput.value = user.displayName || data.fullName || '';
+        }
+        
+        // ملء الإيميل (يفترض أنه للقراءة فقط)
+        const emailInput = document.getElementById('email');
+        if (emailInput) {
+            emailInput.value = user.email || '';
+        }
+        
+        // إذا كان هناك كود إحالة في الرابط، يتم حفظه مؤقتاً في referredBy (إذا لم يكن موجوداً)
+        // هذا يتم تنفيذه عادةً عند إنشاء سجل المستخدم في auth.js، لكننا نتركه هنا كتحقق ثانوي.
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlReferralCode = urlParams.get('ref');
+
+        if (urlReferralCode && !data.referredBy) {
+            // تحديث referredBy بشكل متفائل لضمان حفظه عند الإرسال
+             await db.collection('users').doc(user.uid).set({
+                 referredBy: urlReferralCode,
+             }, { merge: true });
+             
+             // ملء حقل الإحالة (إذا لم يكن للقراءة فقط)
+             const referralInput = document.getElementById('referralCode');
+             if(referralInput) referralInput.value = urlReferralCode;
         }
     };
 }
