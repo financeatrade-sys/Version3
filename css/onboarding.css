@@ -1,0 +1,82 @@
+/* =================================================================
+   css/onboarding.css - Styling for the Onboarding Page
+   ================================================================= */
+
+.onboarding-section {
+    padding: 100px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px); 
+}
+
+.onboarding-card {
+    background-color: var(--color-secondary);
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 500px; 
+    width: 100%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    border-top: 5px solid var(--color-accent);
+    margin: 0 auto; /* توسيط البطاقة */
+}
+
+.onboarding-title {
+    color: var(--color-accent);
+    margin-bottom: 10px;
+    font-size: 2.2rem;
+}
+
+.onboarding-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+/* إعادة استخدام تنسيقات حقول النموذج من auth.css/main.css */
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+}
+
+.form-hint {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-top: 5px;
+}
+
+.full-width-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    margin-top: 20px;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 600px) {
+    .onboarding-card {
+        padding: 25px;
+    }
+    .onboarding-title {
+        font-size: 1.8rem;
+    }
+}

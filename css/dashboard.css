@@ -1,0 +1,355 @@
+/* =================================================================
+   css/dashboard.css - Styling for the Dashboard Page
+   ================================================================= */
+
+.dashboard-section {
+    padding: 60px 0;
+    min-height: calc(100vh - 120px);
+}
+
+.dashboard-welcome {
+    font-size: 2.5rem;
+    color: var(--color-accent);
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+/* --- 1. Tabs Navigation --- */
+.tabs-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: color 0.3s, border-bottom 0.3s;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-button:hover {
+    color: var(--color-text-light);
+}
+
+.tab-button.active {
+    color: var(--color-accent);
+    border-bottom: 3px solid var(--color-accent);
+    font-weight: 600;
+}
+
+.tab-button i {
+    margin-right: 8px;
+}
+
+/* --- 2. Tabs Content (Panes) --- */
+.tab-pane {
+    padding: 20px 0;
+}
+
+.tab-pane.hidden {
+    display: none;
+}
+
+/* --- 3. Metrics Cards (Overview) --- */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.metric-card {
+    background-color: var(--color-secondary);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 120px;
+}
+
+.metric-title {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.metric-value {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--color-text-light);
+}
+
+/* تمييز الألوان */
+.balance-usd .metric-value {
+    color: #4CAF50; /* أخضر للدولار */
+}
+.balance-points .metric-value {
+    color: var(--color-accent); /* أصفر للتوكنز/النقاط */
+}
+.pool-pending .metric-value {
+    color: #FF9800; /* برتقالي للمنتظر */
+}
+.prime-level .metric-value {
+    color: #2196F3; /* أزرق للمستوى */
+}
+
+/* --- 4. Call To Action Button --- */
+.large-cta-btn {
+    padding: 20px;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 600px) {
+    .dashboard-welcome {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+    .tabs-navigation {
+        justify-content: center;
+        gap: 5px;
+    }
+    .tab-button {
+        flex-grow: 1;
+        font-size: 0.9rem;
+        padding: 8px 10px;
+    }
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =================================================================
+   Wallet Tab Styling (js/wallet.js related) Start...
+   ================================================================= */
+
+.wallet-balances {
+    display: flex;
+    justify-content: space-around;
+    background-color: #2c3e50; /* لون خلفية أغمق قليلاً */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.wallet-balances p {
+    font-size: 1.1rem;
+    color: var(--color-text-light);
+    margin: 0;
+}
+
+.wallet-balances strong {
+    font-size: 1.5rem;
+    margin-left: 10px;
+    color: var(--color-accent);
+}
+
+/* --- Action Cards (Deposit, Withdraw, Transfer, Pool) --- */
+.wallet-actions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.action-card {
+    background-color: var(--color-secondary);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    border-top: 5px solid var(--color-accent);
+}
+
+.action-card h3 {
+    font-size: 1.4rem;
+    color: var(--color-accent);
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #3c4e61;
+    margin-bottom: 20px;
+}
+
+.action-card h3 i {
+    margin-right: 10px;
+}
+
+.action-card .full-width-btn {
+    margin-top: 15px;
+    padding: 12px;
+}
+
+/* Specific Pool Card Styling */
+.pool-card {
+    border-top: 5px solid #2ecc71; /* لون أخضر مختلف للمجمع */
+}
+.pool-card h3 {
+    color: #2ecc71;
+}
+.btn-accent { /* لتنسيق زر "Add to Pool" */
+    background-color: #2ecc71; 
+    color: #fff;
+    border: none;
+    transition: background-color 0.3s;
+}
+.btn-accent:hover {
+    background-color: #27ae60;
+}
+
+/* --- Transaction History Table --- */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-secondary);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.transaction-table th, .transaction-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #3c4e61;
+}
+
+.transaction-table th {
+    background-color: #34495e;
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+
+.transaction-table tr:hover {
+    background-color: #3c4e61;
+}
+
+/* --- Amount Colors --- */
+.debit {
+    color: #e74c3c; /* أحمر للخصم */
+    font-weight: bold;
+}
+
+.credit {
+    color: #2ecc71; /* أخضر للإضافة */
+    font-weight: bold;
+}
+
+/* --- Status Colors --- */
+.status-pending {
+    color: #f39c12; /* برتقالي */
+}
+.status-completed {
+    color: #2ecc71; /* أخضر */
+}
+.status-active {
+    color: #3498db; /* أزرق */
+}
+.no-records {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-style: italic;
+    padding: 20px !important;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 992px) {
+    .wallet-actions-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 768px) {
+    .wallet-balances {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .wallet-actions-container {
+        grid-template-columns: 1fr;
+    }
+}
+/* =================================================================
+   Wallet Tab Styling (js/wallet.js related) end...
+   ================================================================= */
+   
+   /* =================================================================
+   Form Elements Styling (Used in Wallet, Profile, etc.) start...
+   ================================================================= */
+
+.transaction-form .form-group {
+    margin-bottom: 20px;
+}
+
+.transaction-form label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.transaction-form input[type="text"],
+.transaction-form input[type="number"],
+.transaction-form input[type="email"],
+.transaction-form select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #444; /* حدود أغمق */
+    background-color: #333; /* خلفية أغمق */
+    color: var(--color-text-light);
+    border-radius: 6px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box; /* لضمان أن العرض 100% يشمل الحشوة */
+    font-size: 1rem;
+}
+
+.transaction-form input:focus,
+.transaction-form select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent); /* إطار حول الحقل عند التركيز */
+    outline: none;
+    background-color: #3a3a3a; /* إضاءة خفيفة عند التركيز */
+}
+
+.transaction-form .form-hint {
+    display: block;
+    font-size: 0.8rem;
+    color: #95a5a6; /* لون رمادي فاتح للتلميحات */
+    margin-top: 5px;
+}
+
+/* تنسيق خاص لعرض العنوان في نموذج الإيداع */
+.alert-info code {
+    display: block;
+    background-color: #2c3e50;
+    padding: 8px;
+    border-radius: 4px;
+    color: #3498db; /* لون أزرق لتمييز العنوان */
+    word-break: break-all;
+    margin-top: 5px;
+}
+
+/* تحديث بسيط لأزرار الإرسال داخل النماذج لتكون أكثر بروزًا */
+.transaction-form .btn-primary,
+.transaction-form .btn-accent {
+    padding: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+   /* =================================================================
+   Form Elements Styling (Used in Wallet, Profile, etc.) end...
+   ================================================================= */

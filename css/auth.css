@@ -1,0 +1,145 @@
+/* =================================================================
+   css/auth.css - Styling for the Login/Register Page (FINAL)
+   ================================================================= */
+
+/* --- 1. Section Layout & Card --- */
+.auth-section {
+    padding: 100px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px); /* تقريباً كامل ارتفاع الشاشة (ناقص الهيدر والفوتر) */
+}
+
+.auth-card {
+    background-color: var(--color-secondary);
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 450px; /* زيادة بسيطة للعرض لتحسين مظهر الحقول */
+    width: 100%;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+    text-align: center;
+    border-top: 5px solid var(--color-accent);
+	margin: 0 auto;
+}
+
+.auth-card h2 {
+    color: var(--color-accent);
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+/* --- 2. Form Groups & Inputs --- */
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"],
+.form-group select { /* تطبيق التنسيق على حقل Select (الدولة) */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    /* إزالة سهم المتصفح الافتراضي للقائمة المنسدلة */
+    -webkit-appearance: none; 
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgba(255, 193, 7, 0.3);
+}
+
+/* زر إرسال النموذج */
+.full-width-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    margin-top: 15px;
+}
+
+/* --- 3. Alerts & Messages --- */
+.alert-danger {
+    background-color: var(--color-danger);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* --- 4. Switch Link & Separator --- */
+.auth-switch-text {
+    margin-top: 25px;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+}
+
+.separator-text {
+    margin: 20px 0;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    /* خط أفقي خفيف */
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+.separator-text::before,
+.separator-text::after {
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    background-color: #333;
+    margin: 0 10px;
+}
+
+/* --- 5. Google Button Style --- */
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4285F4; 
+    color: white;
+    border: none;
+    padding: 12px 20px; 
+    margin-top: 5px; /* تقليل الهامش بعد OR */
+}
+
+.google-btn:hover {
+    background-color: #357AE8;
+}
+
+.google-btn .fab {
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+/* --- 6. Responsive Design --- */
+@media (max-width: 600px) {
+    .auth-section {
+        padding: 40px 15px;
+    }
+    .auth-card {
+        padding: 25px;
+    }
+    .auth-card h2 {
+        font-size: 1.6rem;
+    }
+}

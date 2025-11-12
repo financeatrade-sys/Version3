@@ -1,0 +1,366 @@
+/* =================================================================
+   style-merged.css - Global + Homepage Styles (Fully Responsive)
+   ================================================================= */
+
+/* --- 1. Global Variables & Reset --- */
+:root {
+    --color-primary: #121212;        
+    --color-secondary: #1E1E1E;      
+    --color-accent: #FFC107;         
+    --color-text-light: #F8F9FA;     
+    --color-text-muted: #ADB5BD;     
+    --color-success: #28A745;
+    --color-danger: #DC3545;
+    --font-family-base: 'Arial', sans-serif;
+}
+
+.hidden {
+    display: none !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-base);
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
+    line-height: 1.6;
+    direction: ltr; 
+    text-align: center; 
+}
+
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+a:hover { color: #FFE082; }
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* --- 2. Typography --- */
+h1, h2, h3 {
+    margin-bottom: 0.5em;
+    font-weight: 700;
+    text-align: center; 
+}
+h1 { font-size: 2.8rem; }
+h2 { font-size: 2rem; color: var(--color-accent); }
+h3 { font-size: 1.5rem; color: var(--color-text-light); }
+p { margin-bottom: 1em; }
+
+/* --- 3. Buttons --- */
+.btn-primary, .btn-secondary {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+.btn-primary {
+    background-color: var(--color-accent);
+    color: #000;
+}
+.btn-primary:hover { background-color: #FFD54F; }
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--color-accent);
+    color: var(--color-accent);
+}
+.btn-secondary:hover {
+    background-color: var(--color-accent);
+    color: #000;
+}
+
+/* --- 4. Header & Navigation --- */
+.main-header {
+    background-color: var(--color-primary);
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-secondary);
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--color-accent);
+}
+.main-nav .nav-link {
+    margin-left: 20px; 
+    color: var(--color-text-light);
+}
+
+/* --- 5. Footer --- */
+.main-footer {
+    background-color: var(--color-secondary);
+    padding: 30px 0;
+    margin-top: 50px;
+    text-align: center;
+    border-top: 1px solid #333;
+}
+
+/* --- 6. Section Padding --- */
+section {
+    padding: 80px 0;
+    text-align: center; 
+}
+
+/* =================================================================
+   Homepage Sections - Slider / Features / Categories / Stats / CTA
+   ================================================================= */
+
+/* --- 1. Hero Slider Section --- */
+.hero-slider-section {
+    padding: 100px 0;
+    background-color: var(--color-secondary);
+    height: 500px;
+    display: flex;
+    align-items: center;
+    overflow: hidden; 
+    position: relative; 
+}
+
+.slider-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0; 
+    height: 100%;
+    width: 300%; 
+    display: flex;
+    transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94); 
+}
+
+.slide {
+    flex-shrink: 0;
+    width: calc(100% / 3); 
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+    text-align: center;
+}
+.slide h1, .slide p {
+    text-align: center; 
+    max-width: 800px; 
+    width: 100%;
+}
+.slide h1 {
+    font-size: 3.5rem;
+    color: var(--color-accent);
+    margin-bottom: 20px;
+}
+.subheadline {
+    color: var(--color-text-muted);
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+}
+.slider-controls {
+    margin-top: 50px;
+    text-align: center;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    z-index: 10;
+}
+.control-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-color: var(--color-text-muted);
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+.control-dot.active {
+    background-color: var(--color-accent);
+    transform: scale(1.2);
+}
+
+/* --- 2. Features Grid --- */
+.usp-section { background-color: var(--color-primary); padding-bottom: 40px; }
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+.feature-card {
+    background-color: var(--color-secondary);
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.3s;
+    border-bottom: 4px solid var(--color-accent);
+}
+.feature-card:hover { transform: translateY(-5px); }
+.feature-card .icon {
+    font-size: 2.5rem;
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: 15px;
+}
+.feature-card h3 {
+    color: var(--color-accent);
+    margin-bottom: 10px;
+}
+.feature-card p { color: var(--color-text-muted); }
+
+/* --- 3. Task Categories Section --- */
+.categories-section { background-color: var(--color-primary); }
+.categories-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 40px;
+}
+.category-item {
+    padding: 20px;
+    max-width: 300px;
+    border: 1px solid var(--color-secondary);
+    border-radius: 12px;
+    transition: border-color 0.3s;
+}
+.category-item:hover { border-color: var(--color-accent); }
+.category-icon {
+    font-size: 2rem;
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: 10px;
+}
+
+/* --- 4. Trust Statistics Section --- */
+.stats-section { background-color: var(--color-secondary); padding: 60px 0; }
+.stats-grid {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+.stat-item { text-align: center; }
+.stat-value {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--color-accent);
+    display: block;
+    line-height: 1;
+}
+.stat-label {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+/* --- 5. Final CTA --- */
+.cta-section {
+    padding: 60px 0;
+    background-color: var(--color-primary);
+}
+.large-cta-btn {
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    margin-top: 30px;
+}
+
+/* =================================================================
+   📱 Responsive Design - Mobile / Tablet / Laptop
+   ================================================================= */
+
+/* Small phones */
+@media (max-width: 480px) {
+    body { font-size: 14px; }
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.2rem; }
+
+    .container { width: 95%; }
+
+    .main-header .header-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    .main-nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        padding: 14px 0;
+    }
+
+    .main-footer { font-size: 0.9rem; }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    h1 { font-size: 2.3rem; }
+    h2 { font-size: 1.8rem; }
+    h3 { font-size: 1.3rem; }
+    .container { width: 90%; }
+
+    section { padding: 60px 0; }
+
+    .features-grid,
+    .categories-grid,
+    .stats-grid {
+        grid-template-columns: 1fr;
+        display: grid;
+        gap: 30px;
+    }
+    .feature-card, .category-item { max-width: 100%; }
+
+    /* Responsive Slider */
+    .hero-slider-section {
+        height: auto;
+        padding: 60px 0;
+    }
+    .slider-wrapper {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        transform: none !important;
+    }
+    .slide {
+        width: 100%;
+        padding: 40px 20px;
+    }
+    .slide h1 { font-size: 2rem; text-align: center; }
+    .slide p { font-size: 1rem; text-align: center; }
+    .slider-controls {
+        position: static;
+        margin-top: 20px;
+    }
+
+    .stats-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+    .stat-value { font-size: 2.2rem; }
+}
+
+/* Laptops */
+@media (max-width: 1024px) {
+    .container { width: 85%; }
+    section { padding: 70px 0; }
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TokenYouOwn - Complete Your Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">  
+    <link rel="stylesheet" href="css/onboarding.css"> </head>
+<body>
+    
+    <header class="main-header">
+        <div class="container header-content">
+            <a href="index.html" class="logo">TokenYouOwn</a>
+            </div>
+    </header>
+
+    <section id="onboarding-section" class="onboarding-section">
+        <div class="container">
+            <div class="onboarding-card">
+                
+                <h2 class="onboarding-title">Welcome Aboard!</h2>
+                <p class="onboarding-subtitle">One last step to complete your profile and get your first 100 points.</p>
+                
+                <div id="onboarding-error" class="alert-danger hidden"></div>
+
+                <form id="onboarding-form">
+                    
+                    <div class="form-group">
+                        <label for="username">Choose a Username</label>
+                        <input type="text" id="username" name="username" required minlength="4">
+                        <small class="form-hint">This name will be visible on the leaderboard.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Select Your Country</label>
+                        <select id="country" name="country" required></select>
+                        <small class="form-hint">Your country is used for regional offers and compliance.</small>
+                    </div>
+
+                    <div class="form-group" id="referral-group">
+                        <label for="referralCode">Referral Code (Optional)</label>
+                        <input type="text" id="referralCode" name="referralCode">
+                        <small class="form-hint">Enter the code you received if any</small>
+                    </div>
+
+                    <button type="submit" id="onboarding-submit-btn" class="btn-primary full-width-btn">
+                        <i class="fas fa-check-circle"></i> Save
+                    </button>
+                    
+                </form>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <p>&copy; 2025 TokenYouOwn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <script src="data/countries.js"></script> 
+
+    <script src="js/firebase-config.js"></script> 
+    <script src="js/app.js"></script>     
+    
+    <script src="js/onboarding.js"></script> 
+</body>
+</html>

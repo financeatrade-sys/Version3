@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TokenYouOwn - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">  
+    <link rel="stylesheet" href="css/dashboard.css"> </head>
+<body>
+    
+    <header class="main-header">
+        <div class="container header-content">
+            <a href="index.html" class="logo">TokenYouOwn</a>
+            <nav>
+                </nav>
+        </div>
+    </header>
+
+    <section class="dashboard-section">
+        <div class="container">
+            
+            <h1 class="dashboard-welcome">
+                Welcome, <span id="user-display-name">User</span>!
+            </h1>
+            
+            <div class="tabs-navigation">
+                <button class="tab-button active" data-tab="overview">
+                    <i class="fas fa-home"></i> Overview
+                </button>
+                <button class="tab-button" data-tab="wallet">
+                    <i class="fas fa-wallet"></i> Wallet
+                </button>
+                <button class="tab-button" data-tab="profile">
+                    <i class="fas fa-user-circle"></i> Profile
+                </button>
+                <button class="tab-button" data-tab="referral">
+                    <i class="fas fa-share-alt"></i> Referral
+                </button>
+            </div>
+
+            <div class="tabs-content">
+                
+                <div id="overview" class="tab-pane active">
+                    <div class="metrics-grid">
+                        <div class="metric-card balance-usd">
+                            <span class="metric-title">USD Balance</span>
+                            <span class="metric-value" id="balance-usd">$0.00</span>
+                        </div>
+                        <div class="metric-card balance-points">
+                            <span class="metric-title">Available Points</span>
+                            <span class="metric-value" id="balance-points">0</span>
+                        </div>
+                        <div class="metric-card pool-pending">
+                            <span class="metric-title">Points Pending Pool</span>
+                            <span class="metric-value" id="points-pending-pool">0</span>
+                        </div>
+                        <div class="metric-card prime-level">
+                            <span class="metric-title">Prime Level</span>
+                            <span class="metric-value" id="prime-level">0</span>
+                        </div>
+                    </div>
+                    
+                    <a href="earn.html" class="btn-primary large-cta-btn full-width-btn">
+                        <i class="fas fa-money-bill-wave"></i> Earn More Points Now!
+                    </a>
+                </div>
+<!------------------------------- --------------- -------------------------------->
+<!------------------------------- START OF WALLET TAB CODE ----------------------->            
+<!------------------------------- --------------- -------------------------------->            
+            
+<div id="wallet" class="tab-pane hidden">
+    <h2>Wallet & Transactions</h2>
+    
+    <div class="wallet-balances">
+        <p>Your Current USD: <strong id="wallet-usd-balance">$0.00</strong></p>
+        <p>Your Current Points: <strong id="wallet-points-balance">0</strong></p>
+    </div>
+
+    <div class="wallet-actions-container">
+        
+        <div class="action-card">
+            <h3><i class="fas fa-arrow-alt-circle-down"></i> Deposit USD (Manual)</h3>
+            <form id="deposit-form" class="transaction-form">
+                <div class="form-group">
+                    <label for="deposit-amount">Amount (USD)</label>
+                    <input type="number" id="deposit-amount" min="0.01" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Coin Selection</label>
+                    <select id="deposit-coin" required>
+                        <option value="USDT">USDT (TRC20)</option>
+                        <option value="USDC">USDC (ERC20)</option>
+                    </select>
+                </div>
+                <p id="wallet-address-display" class="alert-info hidden">
+                    Send to: <code>...</code>
+                </p>
+                <div class="form-group">
+                    <label for="tx-hash">Transaction Hash (Required)</label>
+                    <input type="text" id="tx-hash" required placeholder="Paste your TX Hash here">
+                    <small class="form-hint">Your deposit will be verified manually by an admin.</small>
+                </div>
+                <button type="submit" class="btn-primary full-width-btn">Request Deposit</button>
+                <div id="deposit-message" class="alert-message hidden"></div>
+            </form>
+        </div>
+
+        <div class="action-card">
+            <h3><i class="fas fa-arrow-alt-circle-up"></i> Withdraw USD</h3>
+            <form id="withdraw-form" class="transaction-form">
+                <div class="form-group">
+                    <label for="withdraw-amount">Amount (USD)</label>
+                    <input type="number" id="withdraw-amount" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="withdraw-address">Your Wallet Address</label>
+                    <input type="text" id="withdraw-address" required placeholder="Enter USDT/USDC address">
+                </div>
+                 <div class="form-group">
+                    <label for="withdraw-coin">Coin/Network</label>
+                    <select id="withdraw-coin" required>
+                        <option value="USDT">USDT</option>
+                        <option value="USDC">USDC</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary full-width-btn">Request Withdrawal</button>
+                <div id="withdraw-message" class="alert-message hidden"></div>
+            </form>
+        </div>
+
+        <div class="action-card">
+            <h3><i class="fas fa-exchange-alt"></i> Transfer USD</h3>
+            <form id="transfer-form" class="transaction-form">
+                <div class="form-group">
+                    <label for="transfer-username">Recipient Username</label>
+                    <input type="text" id="transfer-username" required placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="transfer-amount">Amount (USD)</label>
+                    <input type="number" id="transfer-amount" min="0.01" step="0.01" required>
+                </div>
+                <button type="submit" class="btn-primary full-width-btn">Send Funds</button>
+                <div id="transfer-message" class="alert-message hidden"></div>
+            </form>
+        </div>
+        
+        <div class="action-card pool-card">
+            <h3><i class="fas fa-hand-holding-usd"></i> Add Points to Pool</h3>
+            <p class="form-hint">Points added here contribute to the weekly USD distribution pool and cannot be reversed.</p>
+            <form id="add-to-pool-form" class="transaction-form">
+                 <div class="form-group">
+                    <label for="pool-amount">Points to Add</label>
+                    <input type="number" id="pool-amount" min="1" required>
+                </div>
+                <button type="submit" class="btn-accent full-width-btn">Add to Pool</button>
+                <div id="pool-message" class="alert-message hidden"></div>
+            </form>
+        </div>
+        
+    </div> <h3 style="margin-top: 40px;">Transaction History</h3>
+    <div id="transaction-history-container" class="table-responsive">
+        <p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading transaction history...</p>
+    </div>
+
+</div>
+<!------------------------------- --------------- -------------------------------->
+<!------------------------------- END OF WALLET TAB CODE ------------------------->            
+<!------------------------------- --------------- --------------------------------> 
+
+<!------------------------------- --------------- -------------------------------->
+<!------------------------------- Start OF profile TAB CODE ---------------------->            
+<!------------------------------- --------------- --------------------------------> 
+
+                <div id="profile" class="tab-pane hidden">
+					<h2>User Profile</h2>
+					<form id="profile-form" class="transaction-form">
+						<div id="profile-details-container">
+							<p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading profile data...</p>
+						</div>
+						<button type="submit" id="update-profile-btn" class="btn-primary" disabled>
+						Save Profile Changes
+						</button>
+							<div id="profile-status" class="alert-message hidden"></div>
+					</form>
+				</div>
+
+<!------------------------------- --------------- -------------------------------->
+<!------------------------------- END OF profile TAB CODE ------------------------>            
+<!------------------------------- --------------- --------------------------------> 
+
+<!------------------------------- --------------- -------------------------------->
+<!------------------------------- Start OF Referral TAB CODE --------------------->            
+<!------------------------------- --------------- --------------------------------> 
+
+                <div id="referral" class="tab-pane hidden">
+					<h2>Referral Program</h2>
+					<div id="referral-content">
+						<p class="loading-text"><i class="fas fa-spinner fa-spin"></i> Loading referral data...</p>
+					</div>
+				</div>
+
+<!------------------------------- --------------- -------------------------------->
+<!------------------------------- END OF Referral TAB CODE ----------------------->            
+<!------------------------------- --------------- --------------------------------> 
+            </div> </div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container footer-content">
+            <p>&copy; 2025 TokenYouOwn. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    
+    <script src="js/firebase-config.js"></script> 
+    <script src="js/app.js"></script>     
+    <script src="js/wallet.js"></script>
+	<script src="js/profile.js"></script>
+	<script src="js/referral.js"></script>
+    <script src="js/dashboard.js"></script> 
+</body>
+</html>
