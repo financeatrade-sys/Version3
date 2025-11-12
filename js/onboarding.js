@@ -74,8 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         errorDisplay.classList.add('hidden');
 
         // 🎯 التعديل الرئيسي لحل مشكلة TypeError:
-        // إذا كان حقل الإدخال موجودًا (ليس null)، خذ قيمته.
-        // إذا كان مفقودًا (null)، خذ اسم العرض من بيانات جوجل (currentUser).
         const username = usernameInput ? usernameInput.value.trim() : '';
         const fullName = fullNameInput 
             ? fullNameInput.value.trim() 
@@ -85,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const enteredReferralCode = referralInput ? referralInput.value.trim() : null; // كود تم إدخاله يدوياً
 
         // 4.1 التحقق من البيانات المطلوبة
-        // نغير الشرط الخاص بالاسم الكامل قليلاً ليسمح بالأسماء التي تم جلبها من جوجل
         if (username.length < 3 || fullName.length < 5 || countryName === "") {
              displayError('Please enter a full name (min 5 chars), username (min 3 chars), and select a country.');
              submitBtn.disabled = false;
@@ -102,6 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 4.3 إنشاء كود الإحالة الخاص بالمستخدم
         const userReferralCode = currentUser.uid.substring(0, 8);
+        
+        // 🚨 جلب المستند الحالي للتحقق من referredBy الموجود مسبقًا
+        const userDocCheck = await db.collection('users').doc(currentUser.uid).get();
+        const existingReferredBy = userDocCheck.exists ? userDocCheck.data().referredBy : null;
 
 
         try {
@@ -128,13 +129,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // تحديث اسم العرض الخاص بـ Firebase Auth
                 displayName: username,
+                
+                // 🎯 التعديل لضمان ظهور referredBy:
+                // إذا كان موجودًا مسبقًا (من الرابط)، استخدم قيمته.
+                // إذا لم يكن موجودًا، استخدم القيمة المدخلة يدوياً (والتي قد تكون null).
+                referredBy: existingReferredBy || enteredReferralCode, 
             };
             
-            // 🚨 منطق الإحالة: إذا كان هناك كود مدخل يدوياً، يتم إضافته إلى referredBy
-            const userDocCheck = await db.collection('users').doc(currentUser.uid).get();
-            if (enteredReferralCode && userDocCheck.exists && !userDocCheck.data().referredBy) {
-                 updateData.referredBy = enteredReferralCode;
-            }
+            
+            // 🚨 إزالة منطق الإحالة الشرطي القديم لأنه أصبح غير ضروري:
+            // if (enteredReferralCode && userDocCheck.exists && !userDocCheck.data().referredBy) {
+            //      updateData.referredBy = enteredReferralCode;
+            // }
 
             // نستخدم set مع merge: true لضمان إنشاء المستند إذا لم يكن موجوداً
 			await db.collection('users').doc(currentUser.uid).set(updateData, { merge: true });
