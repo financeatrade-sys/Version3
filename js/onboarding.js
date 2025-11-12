@@ -115,12 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 country: countryName,
                 
                 // حالة الاكتمال والمكافأة
-                balance: firebase.firestore.FieldValue.increment(START_BONUS), 
+                points: firebase.firestore.FieldValue.increment(START_BONUS), 
                 isProfileComplete: true,
                 onboardingCompleted: true,
                 
                 // حقول التهيئة الإضافية (مهمة لـ dashboard.js)
-                points: 0,
+                balance: 0,
                 pointsPendingPool: 0,
                 primeLevel: 0,
                 referralCode: userReferralCode, // كود الإحالة الخاص به
