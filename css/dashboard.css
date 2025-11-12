@@ -393,7 +393,7 @@
 .copy-btn {
     padding: 12px 15px; 
     /* 👈 التعديل: استخدام لون بارز متناسق مع الداشبورد */
-    background-color: var(--primary-color, #007bff); 
+    background-color: var(--primary-color, #FFC107); 
     color: white;
     border: none; 
     flex-shrink: 0; 
@@ -413,3 +413,4 @@
     color: #ccc; /* لون فاتح للعناوين */
     margin-top: 20px;
 }
+
