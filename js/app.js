@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     auth.onAuthStateChanged((user) => {
         
         const currentPath = window.location.pathname;
-        
+                
         if (user) {
             // المستخدم مسجل الدخول
             
@@ -20,15 +20,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.href = 'dashboard.html';
             } 
             
+            // ************ التحديث هنا ************
+            else if (currentPath.includes('onboarding.html')) {
+                // تمرير بيانات المستخدم إلى صفحة Onboarding لبدء التحديث
+                if (typeof window.loadOnboardingData === 'function') {
+                    window.loadOnboardingData(user);
+                }
+            }
+            // ************ نهاية التحديث ************
+            
             // تحميل بيانات لوحة التحكم
             else if (currentPath.includes('dashboard.html')) {
                 if (typeof window.loadDashboardData === 'function') {
-                    // استدعاء دالة التحميل الرئيسية في dashboard.js
                     window.loadDashboardData(user);
                 }
             }
             
         } else {
+// ...
             // المستخدم غير مسجل الدخول
             
             // حماية الصفحات (لوحة التحكم، المهام، إلخ)
