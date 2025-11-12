@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 1. جلب العناصر الأساسية
     const onboardingForm = document.getElementById('onboarding-form');
-    // 🚨 تأكد من وجود حقل fullName في HTML
+    // 🚨 تأكد من وجود حقل fullName في HTML (يحتمل أن يكون null)
     const fullNameInput = document.getElementById('full-name');
     const countrySelect = document.getElementById('country');
     const submitBtn = document.getElementById('onboarding-submit-btn');
@@ -73,12 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.disabled = true;
         errorDisplay.classList.add('hidden');
 
-        const username = usernameInput.value.trim();
-        const fullName = fullNameInput.value.trim(); // 🚨 جلب الاسم الكامل
-        const countryName = countrySelect.value;
-        const enteredReferralCode = referralInput.value.trim() || null; // كود تم إدخاله يدوياً
+        // 🎯 التعديل الرئيسي لحل مشكلة TypeError:
+        // إذا كان حقل الإدخال موجودًا (ليس null)، خذ قيمته.
+        // إذا كان مفقودًا (null)، خذ اسم العرض من بيانات جوجل (currentUser).
+        const username = usernameInput ? usernameInput.value.trim() : '';
+        const fullName = fullNameInput 
+            ? fullNameInput.value.trim() 
+            : (currentUser.displayName || ''); // القيمة البديلة من Google Auth
+            
+        const countryName = countrySelect ? countrySelect.value : '';
+        const enteredReferralCode = referralInput ? referralInput.value.trim() : null; // كود تم إدخاله يدوياً
 
         // 4.1 التحقق من البيانات المطلوبة
+        // نغير الشرط الخاص بالاسم الكامل قليلاً ليسمح بالأسماء التي تم جلبها من جوجل
         if (username.length < 3 || fullName.length < 5 || countryName === "") {
              displayError('Please enter a full name (min 5 chars), username (min 3 chars), and select a country.');
              submitBtn.disabled = false;
@@ -102,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // تهيئة الحقول (للتأكد من أنها موجودة)
             const updateData = {
-                // البيانات التي أدخلها المستخدم
+                // البيانات التي أدخلها المستخدم (أو تم جلبها من جوجل)
                 username: username,
                 fullName: fullName, 
                 country: countryName,
@@ -124,9 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             // 🚨 منطق الإحالة: إذا كان هناك كود مدخل يدوياً، يتم إضافته إلى referredBy
-            // يتم التحقق فقط إذا لم تكن القيمة مسجلة مسبقاً في قاعدة البيانات
             const userDocCheck = await db.collection('users').doc(currentUser.uid).get();
-            if (enteredReferralCode && !userDocCheck.data().referredBy) {
+            if (enteredReferralCode && userDocCheck.exists && !userDocCheck.data().referredBy) {
                  updateData.referredBy = enteredReferralCode;
             }
 
@@ -192,20 +198,17 @@ if (typeof window.loadOnboardingData !== 'function') {
         }
         
         // إذا كان هناك كود إحالة في الرابط، يتم حفظه مؤقتاً في referredBy (إذا لم يكن موجوداً)
-        // هذا يتم تنفيذه عادةً عند إنشاء سجل المستخدم في auth.js، لكننا نتركه هنا كتحقق ثانوي.
         const urlParams = new URLSearchParams(window.location.search);
         const urlReferralCode = urlParams.get('ref');
 
         if (urlReferralCode && !data.referredBy) {
-            // تحديث referredBy بشكل متفائل لضمان حفظه عند الإرسال
              await db.collection('users').doc(user.uid).set({
                  referredBy: urlReferralCode,
              }, { merge: true });
              
-             // ملء حقل الإحالة (إذا لم يكن للقراءة فقط)
+             // ملء حقل الإحالة
              const referralInput = document.getElementById('referralCode');
              if(referralInput) referralInput.value = urlReferralCode;
         }
     };
 }
-
